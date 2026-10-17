@@ -10,6 +10,12 @@ function errorHandler(err, req, res, next) {
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ error: 'Request body too large' });
+  }
+  if (err.type === 'encoding.unsupported') {
+    return res.status(415).json({ error: 'Unsupported content encoding' });
+  }
   if (err instanceof HttpError) {
     const body = { error: err.message };
     if (err.details) body.details = err.details;
